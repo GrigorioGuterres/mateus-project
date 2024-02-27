@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>AdminLTE 3 | Dashboard</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Tempusdominus Bbootstrap 4 -->
+    <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- JQVMap -->
+    <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
+    <!-- summernote -->
+    <link rel="stylesheet" href="plugins/summernote/summernote-bs4.css">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+
+        <!-- Navbar -->
+        <?php include 'include/navbar.php' ?>
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        <?php include 'include/sidebar.php' ?>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+                   <div class="card-header bg-light shadow-lg">
+                   <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0 text-dark">Pagina Dadus Klinika</h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">Equipamentus</li>
+                            </ol>
+                        </div><!-- /.col -->
+                    </div>
+                   </div><!-- /.row -->
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="card">
+                                <div class="card-header bg-primary">AUMENTA DADUS</div>
+                                <div class="card-body">
+                                 <form method="post">
+                                 <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label">id_klinika</label>
+                                        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Prense Naran Aimoruk">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label">Naran_klinika</label>
+                                        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Prense Naran Aimoruk">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="exampleFormControlInput1" class="form-label">Obs</label>
+                                        <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="Prense Naran Aimoruk">
+                                    </div>
+
+                                    <button class="btn btn-primary" name="submit" value="submit">Submite Dadus</button>
+                                  
+                                 </form>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-8">
+                            <div class="card-header bg-primary">Lista Dadus</div>
+                            <div class="card-body">
+                            <table class="table">
+    <thead>
+        <tr>
+            <th scope="col">id_klinika</th>
+            <th scope="col">Naran_klinika</th>
+            <th scope="col">Obs</th>
+            <th scope="col">Aciton</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        // Koneksi ke database
+        $koneksi = new mysqli("localhost", "root", "", "hospital01");
+
+        // Periksa koneksi
+        if ($koneksi->connect_error) {
+            die("Koneksi gagal: " . $koneksi->connect_error);
+        }
+
+        // Query SQL untuk mengambil data dari tabel t_klinika
+        $sql = "SELECT id_klinika, naran_klinika, obs FROM t_klinika";
+        $result = $koneksi->query($sql);
+
+        // Periksa apakah ada data yang ditemukan
+        if ($result->num_rows > 0) {
+            // Loop melalui setiap baris hasil
+            while ($row = $result->fetch_assoc()) {
+                echo "<tr>";
+                echo "<td>" . $row["id_klinika"] . "</td>";
+                echo "<td>" . $row["naran_klinika"] . "</td>";
+                echo "<td>" . $row["obs"] . "</td>";
+                echo "<td>";
+                echo "<a  data-bs-toggle='modal' data-bs-target='#editModal'
+                href='javascript:void(0);' data-id='" . $row["id_klinika"] . "'
+                data-naran='" . $row["naran_klinika"] . "'
+                data-obs='" . $row["obs"]."'
+                class='edit-link'>Edit</a> | ";
+                
+                echo "<a href='hapus_klinika.php?id=" . $row["id_klinika"] . "' class='btn btn-danger btn-sm'>Hapus</a>";
+                echo "</td>";
+                echo "</tr>";
+            }
+        } else {
+            echo "<tr><td colspan='4'>Tidak ada data</td></tr>";
+        }
+
+        // Tutup koneksi
+        $koneksi->close();
+        ?>
+    </tbody>
+</table>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content-header -->
+        </div>
+
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title" id="editModalLabel">Edit Data Klinika</h5>
+                <button type="button" class="btn-close" value="MNCP00" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Form for Editing Data -->
+                <form action="proses_edit_klinik.php" method="POST">
+                    <div class="mb-3">
+                        <label for="editIdMunicipiu" class="form-label">ID KLINIKA</label>
+                        <input type="text" class="form-control" id="editIdMunicipiu" name="editIdMunicipiu" readonly>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editNaranMunicipiu" class="form-label">NARAN KLINIK</label>
+                        <input type="text" class="form-control" id="editNaranMunicipiu" name="editNaranMunicipiu"
+                            required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editObs" class="form-label">OBS</label>
+                        <input type="text" class="form-control" id="editObs" name="editObs" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                </form>
+                <!-- and informasaun edit data  -->
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    // JavaScript to populate the edit modal box with data
+    $(document).on('click', '.edit-link', function () {
+        var idMunicipiu = $(this).data('id');
+        var naranMunicipiu = $(this).data('naran');
+        var obs = $(this).data('obs');
+        $('#editIdMunicipiu').val(idMunicipiu);
+        $('#editNaranMunicipiu').val(naranMunicipiu);
+        $('#editObs').val(obs);
+    });
+</script>
+
+        <!-- /.content-wrapper -->
+        <?php include 'include/footer.php' ?>
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <script src="plugins/jquery/jquery.min.js"></script>
+    <!-- jQuery UI 1.11.4 -->
+    <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+    <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+    <script>
+        $.widget.bridge('uibutton', $.ui.button)
+    </script>
+    <!-- Bootstrap 4 -->
+    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- ChartJS -->
+    <script src="plugins/chart.js/Chart.min.js"></script>
+    <!-- Sparkline -->
+    <script src="plugins/sparklines/sparkline.js"></script>
+    <!-- JQVMap -->
+    <script src="plugins/jqvmap/jquery.vmap.min.js"></script>
+    <script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
+    <!-- jQuery Knob Chart -->
+    <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
+    <!-- daterangepicker -->
+    <script src="plugins/moment/moment.min.js"></script>
+    <script src="plugins/daterangepicker/daterangepicker.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+    <!-- Summernote -->
+    <script src="plugins/summernote/summernote-bs4.min.js"></script>
+    <!-- overlayScrollbars -->
+    <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="dist/js/adminlte.js"></script>
+    <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+    <script src="dist/js/pages/dashboard.js"></script>
+    <!-- AdminLTE for demo purposes -->
+    <script src="dist/js/demo.js"></script>
+</body>
+
+</html>
